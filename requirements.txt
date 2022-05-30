@@ -1,4 +1,6 @@
-tqdm
 numpy
 matplotlib
-rasterio
+cartopy
+pandas
+geopandas
+jupyter

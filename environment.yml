@@ -1,4 +1,4 @@
-name: InSAR_remove_phase_ramp
+name: tides-ts-pyTMD
 channels:
   - conda-forge
 dependencies:
@@ -6,3 +6,9 @@ dependencies:
   - numpy
   - rasterio
   - matplotlib
+  - cartopy
+  - pandas
+  - geopandas
+  - jupyter
+  - netcdf4
+  - pytmd
