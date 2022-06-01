@@ -8,7 +8,7 @@ env:
   CACHE_NUMBER: 0  # increase to reset cache manually
 
 jobs:
-  build-linux:
+  build-os:
     strategy:
       matrix:
         include:
@@ -23,7 +23,7 @@ jobs:
             python-version: 3.8
 
           - os: ubuntu-latest
-            label: linux-64b
+            label: linux-64c
             prefix: /usr/share/miniconda3/envs/my-env
             python-version: 3.9
 

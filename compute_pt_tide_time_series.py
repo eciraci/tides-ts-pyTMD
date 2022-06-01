@@ -257,7 +257,7 @@ def main() -> None:
         f_name = f'PTide_{tide_model}_Lat{pt_lat}_Lon{pt_lon}_date1_' \
                  f'{t_00[0]:02d}-{t_00[1]:02d}-{t_00[2]}_date2_' \
                  f'{t_11[0]:02d}-{t_11[1]:02d}-{t_11[2]}.{output_format}'
-        ds_time_ts.to_netcdf(os.path.join(out_dir, f_name), format="NETCDF4")
+        ds_time_ts.to_netcdf(os.path.join(out_dir, f_name), format='NETCDF4')
     else:
         # - Save tide time series in ascii format.
         # - Output File Name
@@ -270,7 +270,7 @@ def main() -> None:
                   'w', encoding='utf8') as w_fid:
             print('Date'.ljust(25) + 'Tide Height [m]', file=w_fid)
             for cnt, dt in enumerate(list(tide_time)):
-                time_str = datetime.datetime.strftime(dt, "%d/%m/%Y %H:%M:%S")
+                time_str = datetime.datetime.strftime(dt, '%d/%m/%Y %H:%M:%S')
                 print(f'{time_str:25}{tide_ts[cnt]}', file=w_fid)
 
 
@@ -278,4 +278,4 @@ if __name__ == '__main__':
     start_time = datetime.datetime.now()
     main()
     end_time = datetime.datetime.now()
-    print(f"# - Computation Time: {end_time - start_time}")
+    print(f'# - Computation Time: {end_time - start_time}')
