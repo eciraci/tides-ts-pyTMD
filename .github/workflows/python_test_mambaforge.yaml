@@ -20,14 +20,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2  # checkout repository
 
-#      - name: Set cache date  # activate cache
-#        run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
-#      - uses: actions/cache@v2
-#        with:
-#          path: ~/conda_pkgs_dir
-#          key:
-#            ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
-#        id: cache
+      - name: Set cache date  # activate cache
+        run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
+      - uses: actions/cache@v2
+        with:
+          path: ~/conda_pkgs_dir
+          key:
+            ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
+        id: cache
 #
 #      - name: Setup Mambaforge  # setup environment
 #      - uses: conda-incubator/setup-miniconda@v2
