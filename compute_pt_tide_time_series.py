@@ -49,14 +49,13 @@ from pyTMD.read_FES_model import extract_FES_constants
 from utils.create_dir import create_dir
 
 
-def compute_pt_tide_ts(pt_lon: float, pt_lat: float,
+def compute_pt_tide_ts(pt_coords: tuple,
                        date1: datetime.datetime, date2: datetime.datetime,
                        tide_model: str, tide_model_path: str,
                        verbose: bool = False) -> dict:
     """
-    Compute Tide Time Series at the selected Geographic Coordinates.
-    :param pt_lon: Point Longitude - deg
-    :param pt_lat: Point Latitude - deg
+    Compute Tide Time Series at the selected Geographic Coordinates
+    :param pt_coords: PointCoordinates - (pt_lat, pt_lon) - deg
     :param date1: Initial Time - datetime.datetime
     :param date2: Final Time - datetime.datetime
     :param tide_model: Tidal Model - ['CATS2008', 'AOTIM5', 'FES2014']
@@ -64,6 +63,8 @@ def compute_pt_tide_ts(pt_lon: float, pt_lat: float,
     :param verbose: Print intermediate results on Standard Output.
     :return: Python Dictionary Containing the computed Time Series.
     """
+    # - Extract Point Coordinates
+    pt_lon, pt_lat = pt_coords
     # - Define Model's Specific Processing Parameters
     if tide_model in ['CATS2008', 'AOTIM5']:
         if tide_model == 'CATS2008':
@@ -114,7 +115,7 @@ def compute_pt_tide_ts(pt_lon: float, pt_lat: float,
     if verbose:
         print('# - Loading Model Parameters.')
     if model_format in ('OTIS', 'ATLAS'):
-        amp, ph, d, c = extract_tidal_constants(pt_lon, pt_lat, grid_file,
+        amp, ph, _, c = extract_tidal_constants(pt_lon, pt_lat, grid_file,
                                                 model_file, epsg_code,
                                                 TYPE=var_type,
                                                 METHOD='spline',
@@ -164,7 +165,7 @@ def compute_pt_tide_ts(pt_lon: float, pt_lat: float,
 
     # - Compute Tide Time Series
     tidal_cycle = []
-    for h, dt in enumerate(delta_time):
+    for _, dt in enumerate(delta_time):
         # -- predict tidal elevations at time and infer minor corrections
         tide_p = predict_tide(dt, hc, c, DELTAT=0,
                               CORRECTIONS=model_format)
@@ -184,7 +185,7 @@ def main() -> None:
     # - Read the system arguments listed after the program
     parser = argparse.ArgumentParser(
         description="""Compute Hourly Tide Time Series at the selected
-        locations listed inside an ESRI POINT shapefile (.shp).
+        geographic coordinates.
         """
     )
     # - Positional Arguments
@@ -201,7 +202,7 @@ def main() -> None:
         raise FileNotFoundError('# - Parameters file Not Found.')
 
     # - Import parameters with PyYaml
-    with open(args.parameters, 'r') as stream:
+    with open(args.parameters, 'r', encoding='utf8') as stream:
         param_proc = yaml.safe_load(stream)
 
     # - Create Output Directory
@@ -232,7 +233,7 @@ def main() -> None:
     t_date_11 = datetime.datetime(year=t_11[2], month=t_11[0], day=t_11[1])
 
     # - Compute Tide Time Series at the selected location
-    tide_pt = compute_pt_tide_ts(pt_lon, pt_lat, t_date_00, t_date_11,
+    tide_pt = compute_pt_tide_ts((pt_lon, pt_lat), t_date_00, t_date_11,
                                  tide_model, tide_model_path)
     # - Plot the Computed Daily tidal correction
     tide_ts = tide_pt['tide_ts']
@@ -256,8 +257,7 @@ def main() -> None:
         f_name = f'PTide_{tide_model}_Lat{pt_lat}_Lon{pt_lon}_date1_' \
                  f'{t_00[0]:02d}-{t_00[1]:02d}-{t_00[2]}_date2_' \
                  f'{t_11[0]:02d}-{t_11[1]:02d}-{t_11[2]}.{output_format}'
-        ds_time_ts.to_netcdf(os.path.join(out_dir, f_name),
-                             format="NETCDF4")
+        ds_time_ts.to_netcdf(os.path.join(out_dir, f_name), format="NETCDF4")
     else:
         # - Save tide time series in ascii format.
         # - Output File Name
