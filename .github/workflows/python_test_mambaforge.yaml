@@ -15,7 +15,7 @@ jobs:
         os: [ "ubuntu-latest", "macos-latest", "windows-latest" ]
         python-version: [ "3.7", "3.8", "3.9" ]
 
-    name: test # ${{ matrix.os }}-${{ matrix.python-version }}
+    name: ci-test+cache
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2  # checkout repository
@@ -29,16 +29,16 @@ jobs:
             ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
         id: cache
 #
-#      - name: Setup Mambaforge  # setup environment
-#      - uses: conda-incubator/setup-miniconda@v2
-#      with:
-#        activate-environment: env-test
-#        channel-priority: strict
-#        environment-file: environment.yml
-#        miniforge-version: latest
-#        use-mamba: true
-#        python-version: ${{ matrix.python-version }}
-#        use-only-tar-bz2: true # IMPORTANT: This needs to be set for caching to work properly!
+      - name: Setup Mambaforge  # setup environment
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: env-test
+          channel-priority: strict
+          environment-file: environment.yml
+          miniforge-version: latest
+          use-mamba: true
+          python-version: ${{ matrix.python-version }}
+          use-only-tar-bz2: true # IMPORTANT: This needs to be set for caching to work properly!
 #
 #      - name: Update environment
 #        run: mamba env update -n env-test -f environment.yml
