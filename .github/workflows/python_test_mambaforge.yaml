@@ -22,6 +22,7 @@ jobs:
 
       - name: Set cache date  # activate cache
         run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
+
       - uses: actions/cache@v2
         with:
           path: ~/conda_pkgs_dir
@@ -30,7 +31,7 @@ jobs:
         id: cache
 #
       - name: Setup Mambaforge  # setup environment
-      - uses: conda-incubator/setup-miniconda@v2
+        uses: conda-incubator/setup-miniconda@v2
         with:
           activate-environment: env-test
           channel-priority: strict
