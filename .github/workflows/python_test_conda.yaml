@@ -8,7 +8,7 @@ env:
   CACHE_NUMBER: 0  # increase to reset cache manually
 
 jobs:
-  build-linux:
+  build-os:
     strategy:
       matrix:
         include:
