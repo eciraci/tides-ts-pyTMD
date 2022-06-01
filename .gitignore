@@ -1,3 +1,10 @@
+# OSX System Files
+.DS_Store
+
+# PyCharm Parameters & Styele files
+.idea/*
+.idea
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

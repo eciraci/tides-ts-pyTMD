@@ -1,0 +1,13 @@
+model: CATS2008         # Model Name
+path: /Volumes/Extreme Pro/cats2008_tmd    # Absolute Path to Model's data directory
+shp: ./data/Antarctic_GZ_tide/Antarctic_GZ_tide.shp
+out_path: /Users/enricociraci/Desktop      # Absolute Path to Output directory
+out_format: netcdf      # ascii/txt/netcdf
+date1: 01/01/2008       # Initial Date MM/DD/YYYY
+date2: 01/31/2008       # Final Date MM/DD/YYYY
+nproc: 9                # Number of Maximum simultaneous processes
+
+#model: 'AOTIM5'  # Model Name
+#path: '/Volumes/Extreme Pro/aotim5_tmd/data'    # Absolute Path to Model's data directory
+#model: 'FES2014'  # Model Name
+#path: '/Volumes/Extreme Pro/AVISO'    # Absolute Path to Model's data directory

@@ -1,0 +1,16 @@
+name: tides-ts-pyTMD
+channels:
+  - conda-forge
+dependencies:
+  - pip
+  - numpy
+  - rasterio
+  - matplotlib
+  - cartopy
+  - pandas
+  - geopandas
+  - jupyter
+  - netcdf4
+  - pytmd
+  - fiona
+  - shapely
