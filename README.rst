@@ -75,6 +75,7 @@ Tide Time Series by employing the python pyTMD module.
 3. **parameters.yaml** - Parameters File Content.
 
 .. code-block:: yaml
+
     model: Model - [CATS2008, FES2014, AOTIM5]
     path: Absolute Path to Model's data directory
     shp: ./data/Antarctic_GZ_tide/Antarctic_GZ_tide.shp
