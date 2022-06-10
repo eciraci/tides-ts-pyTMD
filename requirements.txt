@@ -10,4 +10,4 @@ fiona
 shapely
 flake8
 xarray
-yaml
+pyyaml
