@@ -42,7 +42,11 @@ PYTHON DEPENDENCIES:
     geopandas: GeoPandas is an open source project to add support for
            geographic data to pandas objects.
            https://geopandas.org/en/stable/
+    PyYAML: YAML framework for the Python programming language.
+           https://pyyaml.org/
 UPDATE HISTORY:
+06/09/2022 - --stats, -S: option added: Compute Basic Statistics for each of the
+          output time series.
 """
 # - Python Dependencies
 from __future__ import print_function
@@ -75,6 +79,10 @@ def main() -> None:
     # - Positional Arguments
     parser.add_argument('parameters', type=str,
                         help='Processing Parameters File [yml - format].')
+    # - Compute Basic Statistics for each of the output time series
+    parser.add_argument('--stats', action='store_true',
+                        help='Compute Basic Statistics for each of the output'
+                             ' time series')
     args = parser.parse_args()
 
     if not os.path.isfile(args.parameters):
@@ -98,6 +106,10 @@ def main() -> None:
     t_11 = [int(x) for x in param_proc['date2'].split('/')]
     t_date_00 = datetime.datetime(year=t_00[2], month=t_00[0], day=t_00[1])
     t_date_11 = datetime.datetime(year=t_11[2], month=t_11[0], day=t_11[1])
+
+    # - Add sub-period output directory
+    out_dir = create_dir(out_dir, f'{t_00[1]:02d}-{t_00[0]:02d}-{t_00[2]:04d}_'
+                                  f'{t_11[1]:02d}-{t_11[0]:02d}-{t_11[2]:04d}')
 
     # - Import Sample Locations Coordinates
     s_pt_df = gpd.read_file(param_proc['shp'])
@@ -165,6 +177,27 @@ def main() -> None:
                     time_str = datetime.datetime\
                         .strftime(dt, '%d/%m/%Y %H:%M:%S')
                     print(f'{time_str:25}{tide_ts[rnt]}', file=w_fid)
+
+        if args.stats:
+            f_name_st = f'PT{cnt + 1:03d}_{tide_model}' \
+                        f'_Lat{pt_lat}_Lon{pt_lon}_date1_' \
+                        f'{t_00[0]:02d}-{t_00[1]:02d}-{t_00[2]}_date2_' \
+                        f'{t_11[0]:02d}-{t_11[1]:02d}-{t_11[2]}' \
+                        f'_STATS.txt'
+            # - Save the Computed Time Series
+            with open(os.path.join(out_dir, f_name_st),
+                      'w', encoding='utf8') as s_fid:
+                print(f'PT{cnt + 1:03d}_{tide_model}', file=s_fid)
+                print(f'Latitude: {pt_lat} Longitude: {pt_lon}', file=s_fid)
+                print(f'Analyzed Period: ', file=s_fid)
+                print(f'Date1 {t_00[0]:02d}-{t_00[1]:02d}-{t_00[2]}', file=s_fid)
+                print(f'Date2 {t_11[0]:02d}-{t_11[1]:02d}-{t_11[2]}', file=s_fid)
+                print('Point Coordinates:', file=s_fid)
+                print(f'Latitude: {pt_lat} Longitude: {pt_lon}', file=s_fid)
+                print(f'Maximum Annual Value [m]: {np.max(tide_ts)}', file=s_fid)
+                print(f'Minimum Annual Value [m]: {np.min(tide_ts)}', file=s_fid)
+                print(f'Annual Standard Deviation [m]: {np.std(tide_ts)}',
+                      file=s_fid)
 
     # - Save Sample Point Locations inside a Point Shapefile
     smp_point_mask = os.path.join(out_dir, 'spt_coords_mask.shp')

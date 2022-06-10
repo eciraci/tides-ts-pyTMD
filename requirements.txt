@@ -1,0 +1,13 @@
+pip
+numpy
+matplotlib
+pandas
+geopandas
+jupyter
+netcdf4
+pytmd
+fiona
+shapely
+flake8
+xarray
+pyyaml

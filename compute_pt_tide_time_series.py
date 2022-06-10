@@ -30,6 +30,8 @@ PYTHON DEPENDENCIES:
            https://github.com/tsutterley/pyTMD
     xarray: xarray: N-D labeled arrays and datasets in Python
            https://docs.xarray.dev/en/stable/
+    PyYAML: YAML framework for the Python programming language.
+       https://pyyaml.org/
 UPDATE HISTORY:
 """
 # - Python Dependencies
@@ -196,6 +198,10 @@ def main() -> None:
                         help='Point Latitude [deg].')
     parser.add_argument('longitude', type=float,
                         help='Point Longitude [deg].')
+    # - Compute Basic Statistics for each of the output time series
+    parser.add_argument('--stats', action='store_true',
+                        help='Compute Basic Statistics for each of the output'
+                             ' time series')
     args = parser.parse_args()
 
     if not os.path.isfile(args.parameters):
@@ -272,6 +278,27 @@ def main() -> None:
             for cnt, dt in enumerate(list(tide_time)):
                 time_str = datetime.datetime.strftime(dt, '%d/%m/%Y %H:%M:%S')
                 print(f'{time_str:25}{tide_ts[cnt]}', file=w_fid)
+
+    if args.stats:
+        f_name_st = f'PTide_{tide_model}' \
+                    f'_Lat{pt_lat}_Lon{pt_lon}_date1_' \
+                    f'{t_00[0]:02d}-{t_00[1]:02d}-{t_00[2]}_date2_' \
+                    f'{t_11[0]:02d}-{t_11[1]:02d}-{t_11[2]}' \
+                    f'_STATS.txt'
+        # - Save the Computed Time Series
+        with open(os.path.join(out_dir, f_name_st),
+                  'w', encoding='utf8') as s_fid:
+            print(f'PTide_{tide_model}', file=s_fid)
+            print(f'Latitude: {pt_lat} Longitude: {pt_lon}', file=s_fid)
+            print(f'Analyzed Period: ', file=s_fid)
+            print(f'Date1 {t_00[0]:02d}-{t_00[1]:02d}-{t_00[2]}', file=s_fid)
+            print(f'Date2 {t_11[0]:02d}-{t_11[1]:02d}-{t_11[2]}', file=s_fid)
+            print('Point Coordinates:', file=s_fid)
+            print(f'Latitude: {pt_lat} Longitude: {pt_lon}', file=s_fid)
+            print(f'Maximum Annual Value [m]: {np.max(tide_ts)}', file=s_fid)
+            print(f'Minimum Annual Value [m]: {np.min(tide_ts)}', file=s_fid)
+            print(f'Annual Standard Deviation [m]: {np.std(tide_ts)}',
+                  file=s_fid)
 
 
 if __name__ == '__main__':
