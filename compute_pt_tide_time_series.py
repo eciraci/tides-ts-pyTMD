@@ -14,7 +14,7 @@ positional arguments:
 
 optional arguments:
   -h, --help  show this help message and exit
-
+  --stats     Compute Basic Statistics for each of the output time series
 
 PYTHON DEPENDENCIES:
     argparse: Parser for command-line options, arguments and sub-commands
