@@ -190,12 +190,16 @@ def main() -> None:
                 print(f'PT{cnt + 1:03d}_{tide_model}', file=s_fid)
                 print(f'Latitude: {pt_lat} Longitude: {pt_lon}', file=s_fid)
                 print(f'Analyzed Period: ', file=s_fid)
-                print(f'Date1 {t_00[0]:02d}-{t_00[1]:02d}-{t_00[2]}', file=s_fid)
-                print(f'Date2 {t_11[0]:02d}-{t_11[1]:02d}-{t_11[2]}', file=s_fid)
+                print(f'Date1 {t_00[0]:02d}-{t_00[1]:02d}-{t_00[2]}',
+                      file=s_fid)
+                print(f'Date2 {t_11[0]:02d}-{t_11[1]:02d}-{t_11[2]}',
+                      file=s_fid)
                 print('Point Coordinates:', file=s_fid)
                 print(f'Latitude: {pt_lat} Longitude: {pt_lon}', file=s_fid)
-                print(f'Maximum Annual Value [m]: {np.max(tide_ts)}', file=s_fid)
-                print(f'Minimum Annual Value [m]: {np.min(tide_ts)}', file=s_fid)
+                print(f'Maximum Annual Value [m]: {np.max(tide_ts)}',
+                      file=s_fid)
+                print(f'Minimum Annual Value [m]: {np.min(tide_ts)}',
+                      file=s_fid)
                 print(f'Annual Standard Deviation [m]: {np.std(tide_ts)}',
                       file=s_fid)
 

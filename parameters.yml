@@ -1,10 +1,10 @@
 model: CATS2008         # Model Name
-path: /Volumes/Extreme Pro/cats2008_tmd    # Absolute Path to Model's data directory
+path: /Users/enricociraci/Desktop/cats2008_tmd    # Absolute Path to Model's data directory
 shp: ./data/Antarctic_GZ_tide/Antarctic_GZ_tide.shp
 out_path: /Users/enricociraci/Desktop      # Absolute Path to Output directory
 out_format: netcdf      # ascii/txt/netcdf
-date1: 01/01/2008       # Initial Date MM/DD/YYYY
-date2: 01/05/2008       # Final Date MM/DD/YYYY
+date1: 01/01/2020       # Initial Date MM/DD/YYYY
+date2: 12/31/2023       # Final Date MM/DD/YYYY
 nproc: 8                 # Number of Maximum simultaneous processes
 
 #model: 'AOTIM5'  # Model Name
