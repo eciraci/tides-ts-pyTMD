@@ -43,10 +43,7 @@ import yaml
 import numpy as np
 import xarray as xr
 # - pyTMD
-from pyTMD.read_tide_model import extract_tidal_constants
-from pyTMD.infer_minor_corrections import infer_minor_corrections
-from pyTMD.predict_tide import predict_tide
-from pyTMD.read_FES_model import extract_FES_constants
+import pyTMD
 # - Utility functions
 from utils.create_dir import create_dir
 
@@ -117,11 +114,12 @@ def compute_pt_tide_ts(pt_coords: tuple,
     if verbose:
         print('# - Loading Model Parameters.')
     if model_format in ('OTIS', 'ATLAS'):
-        amp, ph, _, c = extract_tidal_constants(pt_lon, pt_lat, grid_file,
-                                                model_file, epsg_code,
-                                                TYPE=var_type,
-                                                METHOD='spline',
-                                                GRID=model_format)
+        amp, ph, _, c \
+            = pyTMD.io.OTIS.extract_constants(pt_lon, pt_lat, grid_file,
+                                              model_file, epsg_code,
+                                              TYPE=var_type,
+                                              METHOD='spline',
+                                              GRID=model_format)
         # -- calculate complex phase in radians for Euler's
         cph = -1j * ph * np.pi / 180.0
         # -- calculate constituent oscillation
@@ -129,12 +127,13 @@ def compute_pt_tide_ts(pt_coords: tuple,
 
     else:
         # - model_format = FES
-        amp, ph = extract_FES_constants(pt_lon, pt_lat,
-                                        model_file, TYPE=model_type,
-                                        VERSION=model_version,
-                                        METHOD='spline', EXTRAPOLATE=False,
-                                        CUTOFF=None,
-                                        SCALE=model_scale, GZIP=False)
+        amp, ph \
+            = pyTMD.io.FES.extract_constants(pt_lon, pt_lat,
+                                             model_file, TYPE=model_type,
+                                             VERSION=model_version,
+                                             METHOD='spline', EXTRAPOLATE=False,
+                                             CUTOFF=None,
+                                             SCALE=model_scale, GZIP=False)
         # -- available model constituents
         c = ['2n2', 'eps2', 'j1', 'k1', 'k2', 'l2',
              'lambda2', 'm2', 'm3', 'm4', 'm6', 'm8', 'mf', 'mks2', 'mm',
@@ -169,11 +168,11 @@ def compute_pt_tide_ts(pt_coords: tuple,
     tidal_cycle = []
     for _, dt in enumerate(delta_time):
         # -- predict tidal elevations at time and infer minor corrections
-        tide_p = predict_tide(dt, hc, c, DELTAT=0,
-                              CORRECTIONS=model_format)
-        minor_p = infer_minor_corrections(dt, hc, c,
-                                          DELTAT=0,
-                                          CORRECTIONS=model_format)
+        tide_p \
+            = pyTMD.predict.map(dt, hc, c, deltat=0, corrections=model_format)
+        minor_p \
+            = pyTMD.predict.infer_minor(dt, hc, c, deltat=0,
+                                        corrections=model_format)
         tide_val = tide_p + minor_p
         tidal_cycle.append(tide_val[0])
 
